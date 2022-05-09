@@ -30,8 +30,7 @@
                       </div>
                       <select v-model="formData.province" :class="`form-control ${v$.formData.province.$errors.length ? 'is-invalid' : ''}`"   name="province" id="province" >
                           <option disabled selected>Choose a Province</option>
-                          <option value="M">Male</option>
-                          <option value="F">Female</option> 
+                          <option v-for="prov in provinces" :key="prov.toString()">{{ prov.valueOf() }}</option>
                       </select>
                   </div>
                   <div class="input-errors" v-for="error of v$.formData.province.$errors" :key="error.$uid">
@@ -46,8 +45,7 @@
                       </div>
                       <select v-model="formData.district" :class="`form-control ${v$.formData.district.$errors.length ? 'is-invalid' : ''}`"   name="district" id="district" >
                           <option disabled selected>Choose a District</option>
-                          <option value="M">Male</option>
-                          <option value="F">Female</option> 
+                          <option v-for="distr in districts" :key="distr.toString()">{{ distr.valueOf() }}</option>
                       </select>
                   </div>
                   <div class="input-errors" v-for="error of v$.formData.district.$errors" :key="error.$uid">
@@ -62,8 +60,7 @@
                       </div>
                       <select v-model="formData.neighborhood" :class="`form-control ${v$.formData.neighborhood.$errors.length ? 'is-invalid' : ''}`"   name="neighborhood" id="neighborhood" >
                           <option disabled selected>Choose a Neighborhood</option>
-                          <option value="M">Male</option>
-                          <option value="F">Female</option>
+                           <option v-for="neigh in neighborhoods" :key="neigh.toString()">{{ neigh.valueOf() }}</option>
                       </select>
                   </div>
                   <div class="input-errors" v-for="error of v$.formData.neighborhood.$errors" :key="error.$uid">
@@ -113,6 +110,9 @@
 <script>
 import RestaurantService from '@/services/RestaurantService'
 import useVuelidate from '@vuelidate/core'
+import Province from '../models/enums/Province'
+import District from '../models/enums/District'
+import Neighborhood from '../models/enums/Neighborhood'
 import { required, minLength, numeric, alphaNum, maxLength, helpers} from '@vuelidate/validators'
 const regexSpaces = helpers.regex(/^[a-zA-Z\s]*$/);
 export default {
@@ -133,7 +133,10 @@ export default {
         open_time:this.open_time,
         close_time:this.close_time,
         image_title:this.image_title
-      },      
+      }, 
+      provinces: Province,
+      districts: District,
+      neighborhoods: Neighborhood,     
     };
   },
   validations() {
@@ -141,31 +144,31 @@ export default {
       formData: {
         name: {
            required: helpers.withMessage('The restaurant name is required', required),
-           minLength : minLength(3),
+           minLength :helpers.withMessage('The password must contain at least 3 characters', minLength(3)),
            regexSpaces: helpers.withMessage('only letters and spaces allowed', regexSpaces)
         },
         province: {
-           required,
+           required: helpers.withMessage('The restaurant province is required', required),
            minLength : minLength(3),
            alphaNum
         },
         district: {
-           required,
+           required: helpers.withMessage('The restaurant district is required', required),
            minLength : minLength(3),
-           alphaNum
+           regexSpaces: helpers.withMessage('only letters and spaces allowed', regexSpaces)
         },
         neighborhood: {
-           required,
+           required: helpers.withMessage('The restaurant neighborhood is required', required),
            minLength : minLength(3),
            alphaNum
         },
         open_time: {
-           required,
+           required: helpers.withMessage('The open time is required', required),
            maxLength: maxLength(2),
            numeric
         },
         close_time: {
-           required,
+           required: helpers.withMessage('The close time is required', required),
            maxLength: maxLength(2),
            numeric
         },
@@ -209,4 +212,18 @@ export default {
 }
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+
+.inval{
+
+  width: 100%;
+margin-top: .25rem;
+font-size: 80%;
+color: #dc3545;
+}
+
+.input-errors{
+  margin-top: -18px;
+}
+
+</style>

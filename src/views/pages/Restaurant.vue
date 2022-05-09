@@ -51,6 +51,7 @@
                           <h6 class="mb-0 restaurant-detailed-ratings"><span class="generator-bg rounded text-white" style="background-color:#ff360b;"><i class="icofont-star"></i> 3.1</span> 23 Ratings  <i class="ml-3 icofont-speech-comments"></i> 91 reviews</h6>
                           <hr>
                           <div class="float-right">
+                            <a class="btn btn-sm btn-outline-success" href="#"><i class="icofont-pen"></i> MEALS</a>
                             <a class="btn btn-sm btn-outline-primary" href="#"><i class="icofont-pencil"></i> EDIT</a>
                           </div>
                         </div>

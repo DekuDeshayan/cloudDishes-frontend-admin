@@ -116,7 +116,7 @@
 <script>
 import ReceptionistService from '@/services/ReceptionistService';
 import useVuelidate from '@vuelidate/core'
-import { required, email, sameAs, minLength, alpha, alphaNum} from '@vuelidate/validators'
+import { required, email, sameAs, minLength, alpha, alphaNum, helpers} from '@vuelidate/validators'
 
 export default {
   setup () {
@@ -146,33 +146,34 @@ export default {
     };
   },
   validations() {
+    
     return {
       formData: {
         first_name: {
-           required,
-           minLength : minLength(3),
+           required: helpers.withMessage('The first name is required', required),
+           minLength: helpers.withMessage('The first name must contain at least 3 characters', minLength(3)),
            alpha
         },
         surname: { 
-          required,
-          minLength : minLength(3),
+          required: helpers.withMessage('The surname is required', required),
+         minLength: helpers.withMessage('The surname must contain at least 3 characters', minLength(3)),
           alpha
         },
         username: { 
-          required,
-          minLength : minLength(3),
+          required: helpers.withMessage('The username is required', required),
+          minLength: helpers.withMessage('The username must contain at least 3 characters', minLength(3)),
           alphaNum
          },
         email: {
-          required,
+          required: helpers.withMessage('The email is required', email),
           email
         },
         gender: { 
-          required
+          required: helpers.withMessage('The gender is required', required)
         },
         password: { 
-        required,
-        minLength: minLength(8),
+        required: helpers.withMessage('The password is required', required),
+        minLength: helpers.withMessage('The password must contain at least 8 characters', minLength(8)),
         alphaNum
         },
       },
