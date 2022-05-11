@@ -46,13 +46,16 @@
                           </h6>
                           <p class="text-gray mb-1"><i class="fas fa-map-marker-alt"></i> {{restList.province}}, {{restList.district}}, {{restList.neighborhood}}</p>
                           <p class="text-gray mb-1"><i class="far fa-clock"></i> {{restList.openTime}} AM - {{restList.closeTime}} PM </p>
-                          <p class="text-gray mb-1"><i class="fas fa-phone"></i> +258844444423232 </p>
-                          <p class="text-gray mb-3"><i class="fas fa-envelope"></i> restBomApetite@nanotechmoz.co.mz </p>
+                          <p class="text-gray mb-1"><i class="fas fa-phone"></i> {{restList.phone}} </p>
+                          <p class="text-gray mb-3"><i class="fas fa-envelope"></i> {{restList.email}} </p>
                           <h6 class="mb-0 restaurant-detailed-ratings"><span class="generator-bg rounded text-white" style="background-color:#ff360b;"><i class="icofont-star"></i> 3.1</span> 23 Ratings  <i class="ml-3 icofont-speech-comments"></i> 91 reviews</h6>
                           <hr>
                           <div class="float-right">
-                            <a class="btn btn-sm btn-outline-success" href="#"><i class="icofont-pen"></i> MEALS</a>
-                            <a class="btn btn-sm btn-outline-primary" href="#"><i class="icofont-pencil"></i> EDIT</a>
+                            
+                            <a class="btn btn-sm btn-outline-success" href="#"><i class="fas fa-utensils"></i> Reservations</a>
+                            <a class="btn btn-sm btn-outline-success" href="#"><i class="fas fa-truck"></i> Orders</a>
+                            <a class="btn btn-sm btn-outline-success" href="#"><i class="fas fa-cloud-meatball"></i> Meal List</a>
+                            <a class="btn btn-sm btn-outline-danger" href="#"><i class="icofont-pencil"></i> Edit Details</a>
                           </div>
                         </div>
                       </div>
@@ -84,10 +87,8 @@ export default {
     }
   },
   created() {
-
     RestaurantService.findall().then((response) => {
       this.restaurantList = response.data; 
-      console.log(response.data);
     });
   },
   beforeDestroy() {},

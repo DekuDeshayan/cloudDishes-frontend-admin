@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" id="managerModal" tabIndex="-1">
+    <div class="modal fade" id="managerModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
             <form v-on:submit.prevent="saveManager">
@@ -11,7 +11,7 @@
               </div>
               <div class="modal-body">
                 <div class="form-group">
-                  <label for="firstName">First Name (<small></small>)</label>
+                  <label for="firstName">First Name</label>
                   <div class="input-group mb-3">
                       <div class="input-group-prepend">
                           <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -64,8 +64,8 @@
                       <div class="input-group-prepend">
                           <span class="input-group-text"><i class="fa fa-venus-mars"></i></span>
                       </div>
-                      <select v-model="formData.gender" :class="`form-control ${v$.formData.gender.$errors.length ? 'is-invalid' : ''}`"   name="gender" id="gender" >
-                          <option disabled selected>Choose a gender</option>
+                      <select v-model="formData.gender" :class="`form-control ${v$.formData.gender.$errors.length ? 'is-invalid' : ''}`"  name="gender" id="gender" >
+                          <option selected>Choose a gender</option>
                           <option value="M">Male</option>
                           <option value="F">Female</option> 
                       </select>
@@ -114,11 +114,9 @@
 </template>
 
 <script>
-import { user } from '@/models/User';
 import ManagerService from '@/services/ManagerService';
 import useVuelidate from '@vuelidate/core'
 import { required, email, sameAs, minLength, alpha, alphaNum} from '@vuelidate/validators'
-
 export default {
   setup () {
     return { v$: useVuelidate() }
@@ -128,7 +126,6 @@ export default {
   props: {},   
   data() {
     return {
-      //  formData: { ...user },
       formData : {
         id:this.id,
         first_name:this.first_name,
@@ -183,16 +180,16 @@ export default {
         }
     };
   },
+  mounted() {
+  },
   methods: {
     async saveManager() {
-
-      const result = await this.v$.$validate() // aqui estamos a validar, usei async await para  
+      const result = await this.v$.$validate()
       if (!result) {
        return
       }
-
       this.loading = true;
-      console.log("pass");
+
       ManagerService.save(this.formData).then((response)=>{
         this.successMessage = "User saved successfully!";
         console.log(response.data);
@@ -200,39 +197,29 @@ export default {
         this.$emit('saved', response.data);
         $('#managerModal').modal('hide');
       }).catch((err)=>{
-
           if(err?.errorMessage === 409){
             this.errorMessage = 'Username already exists';
           }else{
             this.errorMessage = 'Unexpected error ocurred';
             console.log(err);  
           }
-
       }).then(()=>this.loading=false);
     
     },
     showManagerModal(){
        $('#managerModal').modal('show');
     }
-
   }
-
 }
 </script>
-
 <style lang="css" scoped>
-
 .inval{
-  width: 100%;
+width: 100%;
 margin-top: .25rem;
 font-size: 80%;
 color: #dc3545;
 }
-
-
 .input-errors{
   margin-top: -18px;
 }
-
-
 </style>

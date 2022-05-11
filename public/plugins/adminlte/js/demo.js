@@ -689,4 +689,4 @@ function cust() {
 }
 
 
-export default cust
+export default cust;

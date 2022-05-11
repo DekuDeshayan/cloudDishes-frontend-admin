@@ -1,5 +1,7 @@
 /* global Chart:false */
+export default dash;
 
+function dash() {
 $(function () {
   'use strict'
 
@@ -143,5 +145,8 @@ $(function () {
     }
   })
 })
+
+}
+
 
 // lgtm [js/unused-local-variable]

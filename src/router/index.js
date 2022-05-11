@@ -8,6 +8,10 @@ import Receptionist from "../views/pages/Receptionist.vue";
 import Customer from "../views/pages/Customer.vue";
 import Manager from "../views/pages/Manager.vue";
 import Restaurant from "../views/pages/Restaurant.vue";
+import Orders from "../views/pages/Orders.vue";
+import Meals from "../views/pages/Meals.vue";
+import Reservations from "../views/pages/Reservations.vue";
+
 import Role from "../models/enums/Role";
 import Store from "../store/index";
 
@@ -39,13 +43,31 @@ const routes = [
         path: "manager",
         name: "manager",
         component: Manager,
-        meta : {roles : [Role.MANAGER, Role.ADMIN]},
+        meta : {roles : [Role.ADMIN]},
       },
       {
         path: "restaurant",
         name: "restaurant",
         component: Restaurant,
         meta : {roles : [Role.MANAGER, Role.ADMIN]},
+      },
+      {
+        path: "orders",
+        name: "orders",
+        component: Orders,
+        meta : {roles : [Role.MANAGER, Role.ADMIN, Role.RECEPTIONIST]},
+      },
+      {
+        path: "meals",
+        name: "meals",
+        component: Meals,
+        meta : {roles : [Role.MANAGER, Role.ADMIN]},
+      },
+      {
+        path: "reservations",
+        name: "reservations",
+        component: Reservations,
+        meta : {roles : [Role.MANAGER, Role.ADMIN, Role.RECEPTIONIST]},
       },
     ],
   },
@@ -63,6 +85,7 @@ const routes = [
     name: "401",
     path: "/401",
     component: Unauthorized,
+    meta : {roles : [Role.MANAGER, Role.ADMIN, Role.RECEPTIONIST]},
   },
   {
     path: "/:catchAll(.*)",

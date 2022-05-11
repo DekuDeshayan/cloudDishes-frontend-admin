@@ -14,6 +14,10 @@ class ReceptionistService {
         return axios.get(API_URL + '/findall');
     }
 
+    generateReceptionistListReport(){
+        return axios.get(API_URL + '/report');
+    }
+
     delete(){
         return null;
     }

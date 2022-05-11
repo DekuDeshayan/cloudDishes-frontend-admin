@@ -14,6 +14,14 @@ class ManagerService {
         return axios.get(API_URL + '/findall');
     }
 
+    findManagersNotLinkedToRests(){
+        return axios.get(API_URL +'/not-linked-to-rests');
+    }
+
+    generateManagerListReport(){
+        return axios.get(API_URL + '/report');
+    }
+
     delete(){
         return null;
     }

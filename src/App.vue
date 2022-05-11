@@ -7,6 +7,7 @@
 
 <script>
 import vuex from "vuex";
+
 export default {
   name: 'App',
   components:  {},

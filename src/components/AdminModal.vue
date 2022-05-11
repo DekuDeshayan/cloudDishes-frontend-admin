@@ -16,4 +16,15 @@ export default {
 }
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+.inval{
+width: 100%;
+margin-top: .25rem;
+font-size: 80%;
+color: #dc3545;
+}
+.input-errors{
+  margin-top: -18px;
+}
+
+</style>

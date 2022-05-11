@@ -12,20 +12,26 @@
         <p class="login-box-msg">Login to the admin area</p>
         <form @submit.prevent="handlelogin" >
           <div class="input-group mb-3">
-            <input v-model="formData.username" type="text" class="form-control" placeholder="Your username" id="username" name="username">
+            <input v-model="formData.username" type="text" :class="`form-control ${v$.formData.username.$errors.length ? 'is-invalid' : ''}`" placeholder="Your username" id="username" name="username">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-user"></span>
               </div>
             </div>
           </div>
+          <div class="input-errors" v-for="error of v$.formData.username.$errors" :key="error.$uid">
+            <span class="inval">{{ error.$message }}</span>
+          </div>
           <div class="input-group mb-3">
-            <input v-model="formData.password" type="password" class="form-control" placeholder="Your password" id="password" name="password">
+            <input v-model="formData.password" type="password" :class="`form-control ${v$.formData.password.$errors.length ? 'is-invalid' : ''}`" placeholder="Your password" id="password" name="password">
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
               </div>
             </div>
+          </div>
+          <div class="input-errors" v-for="error of v$.formData.password.$errors" :key="error.$uid">
+            <span class="inval">{{ error.$message }}</span>
           </div>
           <div class="row">
             <div class="col-8">
@@ -54,17 +60,21 @@
   <!-- /.login-box -->
 </template>
 <script>
-import User from "../../models/User";
+import useVuelidate from '@vuelidate/core';
+import {required, helpers} from '@vuelidate/validators';
 import vuex from "vuex";
 import UserService from "../../services/UserService";
+import Role from '../../models/enums/Role';
 
 export default {
+  setup () {
+    return { v$: useVuelidate() }
+  },
   name: 'Login',
   components: {},
   props: {},
   data() {
     return {
-      // formData : new User(),
        formData : {
         id:this.id,
         first_name:this.first_name,
@@ -83,28 +93,49 @@ export default {
   },
   computed : {
     ...vuex.mapGetters(['currentUser']),
+    ...vuex.mapActions(['clearUser']),
   },
   mounted() {
-    if(this.currentUser?.username) {
+    if(this.currentUser?.role === Role.CLIENT){
+        //if client tries to enter admin page , is dumped out
+        this.clearUser();
+        this.$router.push('/login');
+        this.errorMessage = "Invalid Login";
+    }else if(this.currentUser?.username) {
       this.$router.push('/');
     }
   },
    created: function() {
     document.body.className += ' login';
   },
+  validations() {
+    return {
+      formData: {
+        username: { 
+          required: helpers.withMessage('The username is required', required),
+        },
+        password: { 
+         required: helpers.withMessage('The password is required', required),
+        }
+      }
+    };
+  },
   methods: {
     ...vuex.mapActions(['updateUser']),
-    handlelogin() {
-      if(!this.formData.username || !this.formData.password){
-        return;
+    async handlelogin() {
+      
+      const result = await this.v$.$validate() // aqui estamos a validar, usei async await para  
+      if (!result) {
+       return
       }
 
       this.loading = true;
-      
+      console.log("pass");
       UserService.login(this.formData).then((response) => {
         //update user in vuex
         this.updateUser(response.data);
         this.$router.push('/');
+
       }).catch((err)=>{
         console.log(err);
         this.errorMessage = "Invalid Login";
@@ -115,8 +146,14 @@ export default {
 </script>
 
 <style lang="css" scoped>
-
-
-
+.inval{
+width: 100%;
+margin-top: .25rem;
+font-size: 80%;
+color: #dc3545;
+}
+.input-errors{
+  margin-top: -18px;
+}
 </style>
  

@@ -187,13 +187,13 @@ export default {
   methods: {
     async saveReceptionist() {
 
-      const result = await this.v$.$validate() // aqui estamos a validar, usei async await para  
+      const result = await this.v$.$validate()
       if (!result) {
        return
       }
 
       this.loading = true;
-      console.log("pass");
+      
       ReceptionistService.save(this.formData).then((response)=>{
         this.successMessage = "User saved successfully!";
         console.log(response.data);
@@ -223,7 +223,7 @@ export default {
 <style lang="css" scoped>
 
 .inval{
-  width: 100%;
+width: 100%;
 margin-top: .25rem;
 font-size: 80%;
 color: #dc3545;

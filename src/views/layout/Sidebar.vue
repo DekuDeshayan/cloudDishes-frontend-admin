@@ -58,7 +58,7 @@
               <ul class="nav nav-treeview">
               
               
-                <li class="nav-item">
+                <li class="nav-item" v-if="isManagerOrAdminOrReceptionist">
                   <router-link to="/customer" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>
@@ -69,7 +69,7 @@
             
 
 
-                <li class="nav-item">
+                <li class="nav-item" v-if="isManagerOrAdmin">
                   <router-link to="/receptionist" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>
@@ -78,7 +78,7 @@
                   </router-link>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item" v-if="isAdmin">
                   <router-link to="/manager" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>
@@ -107,7 +107,7 @@
 
              <!--Menu Restaurant  -->
           
-            <li class="nav-item menu-open">
+            <li class="nav-item menu-open" v-if="isManagerOrAdmin">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-hotel"></i>
                 <p>
@@ -130,6 +130,80 @@
               </ul>
 
             </li>
+              <!--Menu Meal  -->
+          
+            <li class="nav-item menu-open" v-if="isManagerOrAdmin">
+              <a href="#" class="nav-link">
+                 <i class="nav-icon fas fa-cloud-meatball"></i>
+                <p>
+                  Meals
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+              
+                <li class="nav-item">
+                  <router-link to="/meals" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                      Manage
+                    </p>
+                  </router-link>
+                </li>
+
+              </ul>
+
+            </li>
+              
+              <!--Menu Orders  -->
+          
+            <li class="nav-item menu-open" v-if="isManagerOrAdminOrReceptionist">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-utensils"></i>
+                <p>
+                  Orders
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+              
+                <li class="nav-item">
+                  <router-link to="/orders" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                      Manage
+                    </p>
+                  </router-link>
+                </li>
+
+              </ul>
+
+            </li>
+              
+              <!--Menu Reservations  -->
+          
+            <li class="nav-item menu-open" v-if="isManagerOrAdminOrReceptionist">
+              <a href="#" class="nav-link">
+                 <i class="nav-icon fas fa-truck"></i>
+                <p>
+                  Reservations
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+              
+                <li class="nav-item">
+                  <router-link to="/reservations" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>
+                      Manage
+                    </p>
+                  </router-link>
+                </li>
+
+              </ul>
+
+            </li>       
 
         </ul>
       </nav>
@@ -144,10 +218,20 @@ import Role from '../../models/enums/Role';
 
 export default {
   computed: {
-     ...vuex.mapGetters(['currentUser']),
-     isAdmin() {
-       return this.currentUser?.role === Role.ADMIN;  
-     },
+      ...vuex.mapGetters(['currentUser']),
+      isAdmin() {
+        return this.currentUser?.role === Role.ADMIN;  
+      },
+      isManagerOrAdmin() {
+        return this.currentUser?.role === Role.ADMIN || this.currentUser?.role===Role.MANAGER;  
+      },
+      isManagerOrAdminOrReceptionist() {
+        return this.currentUser?.role === Role.ADMIN || this.currentUser?.role===Role.MANAGER || this.currentUser?.role===Role.RECEPTIONIST;   
+      },
+      isManagerOrReceptionist() {
+        return this.currentUser?.role===Role.MANAGER || this.currentUser?.role===Role.RECEPTIONIST;   
+      },
+
   },
   methods: {
     ...vuex.mapActions(['clearUser']),

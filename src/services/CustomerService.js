@@ -12,6 +12,11 @@ class CustomerService {
     ban(){
         return null;
     }
+
+    generateCustomerListReport(){
+        return axios.get(API_URL + '/report');
+    }
+
 }
 
 export default new CustomerService();
