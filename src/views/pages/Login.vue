@@ -6,7 +6,7 @@
         <a href="#" class="h1"><b>cloudDISHES</b><small>V1.0</small></a>
       </div>
       <div class="card-body">
-         <div v-if="errorMessage" class="alert alert-danger text-center">
+        <div v-if="errorMessage" class="alert alert-danger text-center">
           {{errorMessage}}
         </div>
         <p class="login-box-msg">Login to the admin area</p>
@@ -98,6 +98,7 @@ export default {
   mounted() {
     if(this.currentUser?.role === Role.CLIENT){
         //if client tries to enter admin page , is dumped out
+        //check again(verify if currentUser.role and currentUser.username....)
         this.clearUser();
         this.$router.push('/login');
         this.errorMessage = "Invalid Login";

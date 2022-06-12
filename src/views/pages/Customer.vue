@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-6 text-right">
                   <button class="btn btn-danger" @click="downloadReport">
-                    <i class="fas fa-file-pdf text-white fa-lg"></i> Export customer Report
+                    <i class="fas fa-file-pdf text-white fa-lg"></i> Export customer list Report
                   </button>
                 </div>
               </div>
@@ -115,13 +115,15 @@ export default {
   methods: {
     downloadReport(){
       CustomerService.generateCustomerListReport().then((response) =>{
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download"); //or any other extension
-        document.body.appendChild(link);
-        link.click();
-        //jQuery('<form target="_blank" action="' + URL + '" method="get"></form>').appendTo('body').submit().remove();
+
+        if(response.status===200){
+            const link = document.createElement("a");
+            link.href = 'http://localhost:8080/api/client/report';
+            link.click();
+        }else{
+          alert("Unexpected error occurred, could not dowload report");
+        }
+
       });
     }
   }

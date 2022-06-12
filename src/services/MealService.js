@@ -2,23 +2,24 @@ import { BASE_API_URL } from "@/common/Constants";
 import axios from "axios";
 import { authHeader } from "./BaseService";
 
-const API_URL  = BASE_API_URL + '/api/restaurant';
+const API_URL  = BASE_API_URL + '/api/meal';
 
-class RestaurantService {
+class MealService {
 
+    save(meal, mealImage){
 
-    save(restaurant, restaurantImage){
         let formData = new FormData();
-        formData.append("restaurantImage", restaurantImage);
-        formData.append("restaurant", JSON.stringify(restaurant));
+        formData.append("mealImage", mealImage);
+        formData.append("meal", JSON.stringify(meal));
 
         return axios.post(API_URL + '/save', formData, {headers: authHeader()});
     }
 
 
-    findall(){
-        return axios.get(API_URL + '/findall');
+    findAllByRestaurant(rest_id){
+        return axios.get(API_URL + '/retrieve-meal-by-rest/'+rest_id);
     }
+
 
     delete(){
         return null;
@@ -30,4 +31,4 @@ class RestaurantService {
   
 }
 
-export default new RestaurantService();
+export default new MealService();

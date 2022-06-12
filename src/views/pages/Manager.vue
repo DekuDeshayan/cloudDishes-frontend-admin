@@ -27,14 +27,14 @@
             <div class="card-header">
               <div class="row">
                 <div class="col-6">
-                   <h3 class="card-title">Customer List</h3>
+                   <h3 class="card-title">Managers List</h3>
                 </div>
                 <div class="col-6 text-right">
                   <button class="btn btn-primary" @click="callManagerModal">New Manager</button>
-                  <button class="btn btn-danger" @click="downloadReport">
-                    <i class="fas fa-file-pdf text-white fa-lg"></i> Export manager Report
+                  <button class="btn btn-danger ml-1" @click="downloadReport">
+                    <i class="fas fa-file-pdf text-white fa-lg"></i> Export manager list Report
                   </button>
-                  </div>
+                </div>
               </div>
             </div>
             <!-- /.card-header -->
@@ -114,13 +114,15 @@ export default {
   methods: {
     downloadReport(){
       ManagerService.generateManagerListReport().then((response) =>{
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download"); //or any other extension
-        document.body.appendChild(link);
-        link.click();
-        //jQuery('<form target="_blank" action="' + URL + '" method="get"></form>').appendTo('body').submit().remove();
+        
+        if(response.status===200){
+            const link = document.createElement("a");
+            link.href = 'http://localhost:8080/api/manager/report';
+            link.click();
+        }else{
+          alert("Unexpected error occurred, could not dowload report");
+        }
+
       });
     },
     callManagerModal() {

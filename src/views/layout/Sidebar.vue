@@ -47,7 +47,7 @@
 
           <!--Menu Administration  -->
           
-            <li class="nav-item menu-open">
+            <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-user"></i>
                 <p>
@@ -107,7 +107,7 @@
 
              <!--Menu Restaurant  -->
           
-            <li class="nav-item menu-open" v-if="isManagerOrAdmin">
+            <li class="nav-item" v-if="isManagerOrAdmin">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-hotel"></i>
                 <p>
@@ -132,7 +132,7 @@
             </li>
               <!--Menu Meal  -->
           
-            <li class="nav-item menu-open" v-if="isManagerOrAdmin">
+            <!-- <li class="nav-item" v-if="isManagerOrAdmin">
               <a href="#" class="nav-link">
                  <i class="nav-icon fas fa-cloud-meatball"></i>
                 <p>
@@ -153,11 +153,11 @@
 
               </ul>
 
-            </li>
+            </li> -->
               
               <!--Menu Orders  -->
           
-            <li class="nav-item menu-open" v-if="isManagerOrAdminOrReceptionist">
+            <li class="nav-item" v-if="isManagerOrAdminOrReceptionist">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-utensils"></i>
                 <p>
@@ -182,7 +182,7 @@
               
               <!--Menu Reservations  -->
           
-            <li class="nav-item menu-open" v-if="isManagerOrAdminOrReceptionist">
+            <li class="nav-item" v-if="isManagerOrAdminOrReceptionist">
               <a href="#" class="nav-link">
                  <i class="nav-icon fas fa-truck"></i>
                 <p>

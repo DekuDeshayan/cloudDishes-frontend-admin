@@ -39,22 +39,21 @@
                   <div class="bg-white card  mb-4 order-list">
                     <div class="gold-members p-4">
                       <div class="media">
-                        <img class="mr-4" src="../../../public/plugins/osahan/img/2.png" alt="Generic placeholder image">
+                        <img class="mr-4" :src="restList.imageUrl" alt="Generic placeholder image">
                         <div class="media-body">
                           <h6 class="mb-2">
                             <a href="detail.html" class="text-black">{{restList.name}}</a>
                           </h6>
-                          <p class="text-gray mb-1"><i class="fas fa-map-marker-alt"></i> {{restList.province}}, {{restList.district}}, {{restList.neighborhood}}</p>
+                          <p class="text-gray mb-1"><i class="fas fa-map-marker-alt"></i> {{restList.province.replace(/_/g, ' ')}}, {{restList.district.replace(/_/g, ' ')}}, {{restList.neighborhood.replace(/_/g, ' ')}}</p>
                           <p class="text-gray mb-1"><i class="far fa-clock"></i> {{restList.openTime}} AM - {{restList.closeTime}} PM </p>
                           <p class="text-gray mb-1"><i class="fas fa-phone"></i> {{restList.phone}} </p>
                           <p class="text-gray mb-3"><i class="fas fa-envelope"></i> {{restList.email}} </p>
                           <h6 class="mb-0 restaurant-detailed-ratings"><span class="generator-bg rounded text-white" style="background-color:#ff360b;"><i class="icofont-star"></i> 3.1</span> 23 Ratings  <i class="ml-3 icofont-speech-comments"></i> 91 reviews</h6>
                           <hr>
                           <div class="float-right">
-                            
                             <a class="btn btn-sm btn-outline-success" href="#"><i class="fas fa-utensils"></i> Reservations</a>
                             <a class="btn btn-sm btn-outline-success" href="#"><i class="fas fa-truck"></i> Orders</a>
-                            <a class="btn btn-sm btn-outline-success" href="#"><i class="fas fa-cloud-meatball"></i> Meal List</a>
+                            <button class="btn btn-sm btn-outline-success" @click="MealListByRestaurant(restList.id, restList.name)"><i class="fas fa-cloud-meatball"></i> Meal List</button>
                             <a class="btn btn-sm btn-outline-danger" href="#"><i class="icofont-pencil"></i> Edit Details</a>
                           </div>
                         </div>
@@ -69,7 +68,7 @@
       </div>
     </div>
   </div>
-  <!-- /.content -->
+  <!-- /.content --> 
 
   <restaurant-modal ref="restaurantModal" @saved="restaurantSaved"/>
 </template>
@@ -98,7 +97,10 @@ export default {
     },
     restaurantSaved(formData){
       this.restaurantList.push(formData);
-    }
+    },
+    MealListByRestaurant(restaurantId, restaurantName){
+      this.$router.push({path: '/Meals', query : { r: restaurantId, rname:restaurantName}});
+    },
   },
 }
 </script>

@@ -30,7 +30,8 @@
                       </div>
                       <select :class="`form-control select2_prov select2bs4 ${v$.formData.province.$errors.length ? 'is-invalid' : ''}`"   name="province" id="province" >
                           <option  disabled selected>Choose a Province</option>
-                          <option v-for="(province, index) in provinces" :key="index" :value="province"> {{ province=='CABO_DELGADO' ? 'CABO DELGADO' : province }}</option>
+                          <option v-for="(province, index) in provinces" :key="index" :value="province.id"> {{province.name.replace(/_/g, ' ')}}
+                          </option>
                       </select>
                   </div>
                   <div class="input-errors" v-for="error of v$.formData.province.$errors" :key="error.$uid">
@@ -45,15 +46,8 @@
                       </div>
                       <select  :class="`form-control select2_district select2bs4 ${v$.formData.district.$errors.length ? 'is-invalid' : ''}`"   name="district" id="district" >
                           <option disabled selected>Choose a District</option>
-                          <option v-for="(district, index) in districts" :key="index" :value="district">
-                            {{
-                                district=='XAI_XAI' ? 'XAI XAI' :
-                                district=='MAPUTO_CITY' ? 'MAPUTO CITY' :
-                                district=='NACALA_A_VELHA' ? 'NACALA A VELHA' :
-                                district=='CAHORA_BASSA' ? 'CAHORA BASSA' :
-                                district=='ALTO_MOLOCUE' ? 'ALTO MOLOCUE': district
-                            }}
-                          </option>
+                          <option v-for="(district, index) in districts" :key="index" :value="district.id">{{district.name.replace(/_/g, ' ')}}
+                           </option>
                       </select>
                   </div>
                   <div class="input-errors" v-for="error of v$.formData.district.$errors" :key="error.$uid">
@@ -68,20 +62,7 @@
                       </div>
                       <select :class="`form-control select2_neigh select2bs4 ${v$.formData.neighborhood.$errors.length ? 'is-invalid' : ''}`"   name="neighborhood" id="neighborhood" >
                           <option disabled selected>Choose a Neighborhood</option>
-                           <option v-for="(neighborhood, index) in neighborhoods" :key="index" :value="neighborhood">
-                            {{
-                                neighborhood=='MATOLA_GARE' ? 'MATOLA GARE' :
-                                neighborhood=='MATOLA_SANTOS' ? 'MATOLA SANTOS' :
-                                neighborhood=='CIDADE_MATOLA' ? 'CIDADE MATOLA' :
-                                neighborhood=='CINEMA_700' ? 'CINEMA 700' :
-                                neighborhood=='MACHAVA_TREVO' ? 'MACHAVA TREVO' :
-                                neighborhood=='NOVO_CEMITERIO' ? 'NOVO CEMITERIO' :
-                                neighborhood=='SANTA_ISABELA' ? 'SANTA ISABELA' :
-                                neighborhood=='NOVO_CEMITERIO' ? 'NOVO CEMITERIO' :
-                                neighborhood=='COSTA_DO_SOL_TRIUNFO' ? 'COSTA DO SOL TRIUNFO' :
-                                neighborhood=='BAIRRO_CENTRAL' ? 'BAIRRO CENTRAL' :
-                                neighborhood=='ZONA_VERDE' ? 'ZONA VERDE' : neighborhood
-                            }}
+                           <option v-for="(neighborhood, index) in neighborhoods" :key="index" :value="neighborhood.id">{{neighborhood.name.replace(/_/g, ' ')}}
                            </option>
                       </select>
                   </div>
@@ -149,7 +130,16 @@
                       <input v-model="formData.phone" type="text" :class="`form-control ${v$.formData.phone.$errors.length ? 'is-invalid' : ''}`" placeholder="phone" name="phone" id="phone">
                   </div>
                   <div class="input-errors" v-for="error of v$.formData.phone.$errors" :key="error.$uid">
-                    <span class="inval">{{ error.$message }}</span>
+                    <span class="inval">{{ error.$message }}<br><br></span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="restaurantImage">Restaurant Image</label>
+                  <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-image"></i></span>
+                      </div>
+                      <input type="file" ref="restaurantImage" accept="image/*" id="restaurantImage" class="form-control"  @change="selectImage"/>
                   </div>
                 </div>
               <div class="alert alert-danger" v-if="errorMessage">{{errorMessage}}</div>
@@ -174,8 +164,9 @@ import useVuelidate from '@vuelidate/core'
 import Province from '../models/enums/Province'
 import District from '../models/enums/District'
 import Neighborhood from '../models/enums/Neighborhood'
-import { required, minLength, numeric, alphaNum, email, maxLength, helpers} from '@vuelidate/validators'
+import { required, minLength, numeric, email, maxLength, helpers} from '@vuelidate/validators'
 const regexSpaces = helpers.regex(/^[a-zA-Z\s]*$/);
+const mobileNumber = helpers.regex(/^(84|82|83|85|86|87)([0-9]{7})$/);
 export default {
    setup () {
     return { v$: useVuelidate() }
@@ -193,11 +184,13 @@ export default {
         neighborhood:this.neighborhood, 
         openTime:this.openTime,
         closeTime:this.closeTime,
-        imageTitle:"img.png",
         user_id: this.user_id,
+        imageName: this.imageName,
+        imageUrl: this.imageUrl,
         email: this.email,
         phone: this.phone
       }, 
+      restaurantImage: undefined,
       provinces: Province,
       districts: District,
       neighborhoods: Neighborhood,  
@@ -237,8 +230,8 @@ export default {
         },
         phone: {
            required: helpers.withMessage('The restaurant phone number is required', required),
-           maxLength: maxLength(13),
-           alphaNum
+           maxLength: maxLength(9),
+           mobileNumber: helpers.withMessage("Invalid Mobile Number", mobileNumber)
         },
         user_id: {
            required: helpers.withMessage('The restaurant manager is required', required)
@@ -270,12 +263,6 @@ export default {
         self.formData.user_id = val;
       });
 
-
-      //Initialize Select2 Elements
-      $('.select2_neigh').select2({
-        dropdownParent: $('#restaurantModal'),
-      });
-
       //Initialize Select2 Elements
       $('.select2bs4').select2({
         theme: 'bootstrap4',
@@ -285,6 +272,10 @@ export default {
   },
   beforeDestroy() {},
   methods: {
+
+    selectImage() {
+      this.restaurantImage = this.$refs.restaurantImage.files.item(0);
+    },
     async saveRestaurant() {
 
       const result = await this.v$.$validate()
@@ -295,46 +286,25 @@ export default {
 
       this.loading = true;
 
-      //verifying selected option by user in provinces to convert again to original value
-      this.formData.province=='CABO DELGADO' ? 'CABO_DELGADO' : this.formData.province;
-      
-      //verifying selected option by user in neighborhood to convert again to original value
-      this.formData.neighborhood=='MATOLA SANTOS' ? 'MATOLA_SANTOS' :
-      this.formData.neighborhood=='CIDADE MATOLA' ? 'CIDADE_MATOLA' :
-      this.formData.neighborhood=='CINEMA 700' ? 'CINEMA_700' :
-      this.formData.neighborhood=='MATOLA GARE' ? 'MATOLA_GARE' :
-      this.formData.neighborhood=='MACHAVA TREVO' ? 'MACHAVA_TREVO' :
-      this.formData.neighborhood=='NOVO CEMITERIO' ? 'NOVO_CEMITERIO' :
-      this.formData.neighborhood=='SANTA ISABELA' ? 'SANTA_ISABELA' :
-      this.formData.neighborhood=='NOVO CEMITERIO' ? 'NOVO_CEMITERIO' :
-      this.formData.neighborhood=='COSTA DO SOL TRIUNFO' ? 'COSTA_DO_SOL_TRIUNFO' :
-      this.formData.neighborhood=='BAIRRO CENTRAL' ? 'BAIRRO_CENTRAL' :
-      this.formData.neighborhood=='ZONA VERDE' ? 'ZONA_VERDE' :  this.formData.neighborhood;
-
-      //verifying selected option by user in districts to convert again to original value
-      this.formData.district=='XAI XAI' ? 'XAI_XAI' :
-      this.formData.district=='ALTO MOLOCUE' ? 'ALTO_MOLOCUE' :
-      this.formData.district=='CAHORA BASSA' ? 'CAHORA_BASSA' :
-      this.formData.district=='MAPUTO CITY' ? 'MAPUTO_CITY' :
-      this.formData.district=='NACALA A VELHA' ? 'NACALA_A_VELHA' :  this.formData.district;
-
-
       console.log(this.formData);
 
-      RestaurantService.save(this.formData).then((response)=>{
+      console.log(this.restaurantImage)
+
+      RestaurantService.save(this.formData, this.restaurantImage).then((response)=>{
         this.successMessage = "restaurant Saved Successfully!";
         console.log(response.data);
-        console.log(this.successMessage);
+        alert(this.successMessage);
         this.$emit('saved', response.data);
         $('#restaurantModal').modal('hide');
       }).catch((err)=>{
 
-          if(err?.errorMessage === 409){
-            this.errorMessage = 'Restaurant already exists';
-          }else{
-            this.errorMessage = 'Unexpected error ocurred';
-            console.log(err);  
-          }
+        if(err.response.status === 417){
+          this.errorMessage = 'File too Large for uploads, maximum allowed is 2MB, please choose another one';
+          alert(this.errorMesssage);
+        }else{
+          this.errorMessage = 'Unexpected error ocurred';
+          alert(this.errorMesssage);
+        }
 
       }).then(()=>this.loading=false);
 
