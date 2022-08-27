@@ -214,8 +214,8 @@ export default {
 
 
 
-    demojs();
-    dash();
+    // demojs();
+    // dash();
   },
   beforeDestroy() {},
   methods: {}
